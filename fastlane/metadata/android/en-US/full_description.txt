@@ -1,0 +1,9 @@
+A color sorting puzzle game. Swap tiles to reconstruct the hidden gradient.
+
+Features
+
+• 4x4 to 10x10 grids that scale with your level
+• Undo support
+• Random puzzle mode (Easy, Medium, Hard)
+• Progress saved automatically
+• No ads. No trackers. No data collection. Fully GDPR compliant.

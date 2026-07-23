@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:huesort/ui/core/theme/app_colors.dart';
 import 'package:huesort/ui/core/widgets/tangible_button.dart';
 import 'package:huesort/ui/features/game/hue_sort/hue_sort_provider.dart';
+import 'package:huesort/ui/features/support/views/support_view.dart';
 import 'package:huesort/ui/providers.dart';
 
 final hueSortViewModelProvider =
@@ -299,11 +299,14 @@ class _HueSortScreenState extends ConsumerState<HueSortScreen> {
                         text: 'Buy Me a Coffee',
                         isSecondary: true,
                         height: 50,
-                        onPressed: () async {
-                          final Uri url = Uri.parse('https://buymeacoffee.com/sidhant947');
-                          if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-                            debugPrint('Could not launch $url');
-                          }
+                        onPressed: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SupportView(),
+                            ),
+                          );
                         },
                       ),
                     ],

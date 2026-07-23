@@ -8,6 +8,7 @@ import 'package:huesort/ui/features/game/hue_sort/hue_sort_screen.dart';
 import 'package:huesort/ui/features/how_to_play/views/how_to_play_view.dart';
 import 'package:huesort/ui/features/level_select/views/level_select_view.dart';
 import 'package:huesort/ui/features/settings/views/settings_view.dart';
+import 'package:huesort/ui/features/support/views/support_view.dart';
 import 'package:huesort/ui/providers.dart';
 
 class HomeView extends ConsumerStatefulWidget {
@@ -154,7 +155,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                   _circleButton(
                     icon: Icons.star_rounded,
                     iconColor: const Color(0xFFFFCC00),
-                    onTap: () => _launchUrl(''),
+                    onTap: () => _launchUrl('https://github.com/sidhant947/HueSort'),
                   ),
                   if (state.progress != null)
                     Container(
@@ -183,8 +184,12 @@ class _HomeViewState extends ConsumerState<HomeView> {
                   _circleButton(
                     icon: Icons.favorite_rounded,
                     iconColor: const Color(0xFFEF4444),
-                    onTap: () =>
-                        _launchUrl('https://buymeacoffee.com/sidhant947'),
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SupportView(),
+                      ),
+                    ),
                   ),
                 ],
               ),

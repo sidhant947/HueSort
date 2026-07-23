@@ -16,4 +16,7 @@ A color sorting puzzle game. Swap tiles to reconstruct the hidden gradient.
 - Progress saved automatically
 - No ads. No trackers. No data collection. Fully GDPR compliant.
 
+## License
+
+[GNU General Public License v3.0](LICENSE)
 

@@ -31,7 +31,7 @@ class _TangibleButtonState extends State<TangibleButton> {
         ? AppColors.surface 
         : AppColors.primary;
 
-    final Color textColor = AppColors.headingDark;
+    final Color textColor = isInteractive ? AppColors.headingDark : AppColors.subtext;
 
     return GestureDetector(
       onTapDown: (_) {
@@ -47,7 +47,7 @@ class _TangibleButtonState extends State<TangibleButton> {
         if (isInteractive) setState(() => _isPressed = false);
       },
       child: Opacity(
-        opacity: isPressedNow ? 0.8 : 1.0,
+        opacity: isInteractive ? (isPressedNow ? 0.8 : 1.0) : 0.45,
         child: Container(
           height: widget.height,
           width: double.infinity,
@@ -63,7 +63,6 @@ class _TangibleButtonState extends State<TangibleButton> {
           child: Text(
             widget.text.toUpperCase(),
             style: TextStyle(
-
               color: textColor,
               fontSize: 20,
               fontWeight: FontWeight.w900,

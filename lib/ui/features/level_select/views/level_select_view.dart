@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:huesort/ui/core/theme/app_colors.dart';
+import 'package:huesort/ui/features/game/hue_sort/hue_sort_engine.dart';
 import 'package:huesort/ui/features/game/hue_sort/hue_sort_screen.dart';
 import 'package:huesort/ui/providers.dart';
 
@@ -122,19 +123,29 @@ class _LevelSelectViewState extends ConsumerState<LevelSelectView> {
     Widget content;
     bool isClickable = !isLocked;
 
+    final isBoss = HueSortEngine.isBossLevel(levelNumber);
+
     if (isCompleted) {
-      cardBg = const Color(0xFF10B981); // Vibrant Emerald Green
+      cardBg = isBoss ? const Color(0xFFD97706) : const Color(0xFF10B981); // Amber / Emerald
       content = Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            '$levelNumber',
-            style: const TextStyle(
-
-              fontSize: 22,
-              fontWeight: FontWeight.w900,
-              color: AppColors.headingWhite,
-            ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (isBoss) ...[
+                const Icon(Icons.star_rounded, size: 14, color: Colors.white),
+                const SizedBox(width: 2),
+              ],
+              Text(
+                '$levelNumber',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                  color: AppColors.headingWhite,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 2),
           const Icon(
@@ -145,23 +156,40 @@ class _LevelSelectViewState extends ConsumerState<LevelSelectView> {
         ],
       );
     } else if (isCurrent) {
-      cardBg = Colors.white;
-      content = Text(
-        '$levelNumber',
-        style: const TextStyle(
-
-          fontSize: 26,
-          color: AppColors.headingWhite,
-          fontWeight: FontWeight.w900,
-        ),
+      cardBg = isBoss ? const Color(0xFFFFB800) : Colors.white;
+      content = Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (isBoss) const Icon(Icons.workspace_premium_rounded, size: 16, color: Colors.black87),
+          Text(
+            '$levelNumber',
+            style: TextStyle(
+              fontSize: isBoss ? 20 : 26,
+              color: isBoss ? Colors.black87 : AppColors.headingWhite,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ],
       );
     } else {
       // Locked state
-      cardBg = AppColors.surface.withValues(alpha: 0.4);
-      content = const Icon(
-        Icons.lock_outline_rounded,
-        size: 18,
-        color: AppColors.subtext,
+      cardBg = isBoss
+          ? const Color(0xFFFFB800).withValues(alpha: 0.15)
+          : AppColors.surface.withValues(alpha: 0.4);
+      content = Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (isBoss)
+            const Padding(
+              padding: EdgeInsets.only(bottom: 2),
+              child: Icon(Icons.star_outline_rounded, size: 12, color: Color(0xFFFFB800)),
+            ),
+          Icon(
+            Icons.lock_outline_rounded,
+            size: 16,
+            color: isBoss ? const Color(0xFFFFB800) : AppColors.subtext,
+          ),
+        ],
       );
     }
 

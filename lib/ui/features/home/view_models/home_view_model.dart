@@ -39,6 +39,12 @@ class HomeViewModel extends StateNotifier<HomeViewModelState> {
     }
   }
 
+  Future<void> completeLevel(int levelNumber) async {
+    await progressRepository.completeLevel(levelNumber);
+    final updated = await progressRepository.getProgress();
+    state = state.copyWith(progress: updated);
+  }
+
   Future<void> resetProgress() async {
     await progressRepository.resetProgress();
     state = const HomeViewModelState(progress: UserProgress());

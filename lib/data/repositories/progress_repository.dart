@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:huesort/domain/models/user_progress.dart';
 import '../services/hive_service.dart';
 
@@ -20,8 +21,12 @@ class ProgressRepository {
 
   Future<void> completeLevel(int levelNumber) async {
     final current = await getProgress();
-    final isNewCompletion = levelNumber == current.highestLevelCompleted + 1;
-    final updated = isNewCompletion ? current.incrementLevel() : current;
+    final newHighest = math.max(current.highestLevelCompleted, levelNumber);
+    final newCurrent = levelNumber >= current.currentLevel ? levelNumber + 1 : current.currentLevel;
+    final updated = current.copyWith(
+      highestLevelCompleted: newHighest,
+      currentLevel: newCurrent,
+    );
     await saveProgress(updated);
   }
 

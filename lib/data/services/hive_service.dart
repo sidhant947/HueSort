@@ -7,12 +7,18 @@ class HiveService {
   static const String _progressBoxName = 'huesort';
   static const String _progressKey = 'progress';
 
+  static const String _settingsBoxName = 'huesort_settings';
+  static const String _showTilesToFixKey = 'show_tiles_to_fix';
+  static const String _hintHelperKey = 'hint_helper';
+
   late Box<UserProgress> _progressBox;
+  late Box<dynamic> _settingsBox;
 
   Future<void> init() async {
     await Hive.initFlutter();
     Hive.registerAdapter(UserProgressAdapter());
     _progressBox = await Hive.openBox<UserProgress>(_progressBoxName);
+    _settingsBox = await Hive.openBox<dynamic>(_settingsBoxName);
   }
 
   Future<UserProgress> getProgress() async {
@@ -25,5 +31,21 @@ class HiveService {
 
   Future<void> clearProgress() async {
     await _progressBox.delete(_progressKey);
+  }
+
+  bool getShowTilesToFix() {
+    return _settingsBox.get(_showTilesToFixKey, defaultValue: true) as bool;
+  }
+
+  Future<void> setShowTilesToFix(bool show) async {
+    await _settingsBox.put(_showTilesToFixKey, show);
+  }
+
+  bool getHintHelper() {
+    return _settingsBox.get(_hintHelperKey, defaultValue: false) as bool;
+  }
+
+  Future<void> setHintHelper(bool enabled) async {
+    await _settingsBox.put(_hintHelperKey, enabled);
   }
 }

@@ -18,3 +18,37 @@ final homeViewModelProvider =
       return HomeViewModel(progressRepository: progressRepository);
     });
 
+final showTilesToFixProvider = StateNotifierProvider<ShowTilesToFixNotifier, bool>((ref) {
+  final hiveService = ref.watch(hiveServiceProvider);
+  return ShowTilesToFixNotifier(hiveService);
+});
+
+class ShowTilesToFixNotifier extends StateNotifier<bool> {
+  ShowTilesToFixNotifier(this._hiveService)
+      : super(_hiveService.getShowTilesToFix());
+
+  final HiveService _hiveService;
+
+  Future<void> toggle(bool value) async {
+    state = value;
+    await _hiveService.setShowTilesToFix(value);
+  }
+}
+
+final hintHelperProvider = StateNotifierProvider<HintHelperNotifier, bool>((ref) {
+  final hiveService = ref.watch(hiveServiceProvider);
+  return HintHelperNotifier(hiveService);
+});
+
+class HintHelperNotifier extends StateNotifier<bool> {
+  HintHelperNotifier(this._hiveService)
+      : super(_hiveService.getHintHelper());
+
+  final HiveService _hiveService;
+
+  Future<void> toggle(bool value) async {
+    state = value;
+    await _hiveService.setHintHelper(value);
+  }
+}
+

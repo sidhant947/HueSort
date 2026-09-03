@@ -63,6 +63,94 @@ class SettingsView extends ConsumerWidget {
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(24, 16, 28, 28),
                 children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.white24, width: 1.0),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Show Tiles to Fix',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.headingDark,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                'Display counter of incorrect tiles during gameplay',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: AppColors.subtext,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Switch(
+                          value: ref.watch(showTilesToFixProvider),
+                          activeTrackColor: const Color(0xFF10B981),
+                          onChanged: (val) {
+                            ref.read(showTilesToFixProvider.notifier).toggle(val);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.white24, width: 1.0),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Hint Helper',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.headingDark,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Text(
+                                'Display bottom hint button on gameplay screen',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: AppColors.subtext,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Switch(
+                          value: ref.watch(hintHelperProvider),
+                          activeTrackColor: const Color(0xFF10B981),
+                          onChanged: (val) {
+                            ref.read(hintHelperProvider.notifier).toggle(val);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                   TangibleButton(
                     text: 'Reset Progress',
                     isSecondary: true,

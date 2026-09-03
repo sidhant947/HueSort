@@ -4,11 +4,11 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:huesort/ui/core/theme/app_colors.dart';
 import 'package:huesort/ui/core/widgets/tangible_button.dart';
+import 'package:huesort/ui/features/game/hue_sort/hue_sort_engine.dart';
 import 'package:huesort/ui/features/game/hue_sort/hue_sort_screen.dart';
 import 'package:huesort/ui/features/how_to_play/views/how_to_play_view.dart';
 import 'package:huesort/ui/features/level_select/views/level_select_view.dart';
 import 'package:huesort/ui/features/settings/views/settings_view.dart';
-import 'package:huesort/ui/features/support/views/support_view.dart';
 import 'package:huesort/ui/providers.dart';
 
 class HomeView extends ConsumerStatefulWidget {
@@ -59,79 +59,188 @@ class _HomeViewState extends ConsumerState<HomeView> {
   }
 
   void _showDifficultyDialog(BuildContext context) {
+    int selectedGrid = 5;
+    HueSortDifficulty selectedDiff = HueSortDifficulty.medium;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white24, width: 1.0),
-            ),
-            padding: const EdgeInsets.all(28),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text(
-                  'CHOOSE DIFFICULTY',
-                  style: TextStyle(
-
-                    fontSize: 28,
-                    fontWeight: FontWeight.w900,
-                    color: AppColors.headingDark,
-                    letterSpacing: 1.0,
-                  ),
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Dialog(
+              backgroundColor: Colors.transparent,
+              insetPadding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.bg,
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: Colors.white12, width: 1.0),
                 ),
-                const SizedBox(height: 24),
-                TangibleButton(
-                  text: 'EASY',
-                  isSecondary: true,
-                  height: 50,
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HueSortScreen(levelNumber: 1, isRandom: true),
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'RANDOM PUZZLE',
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.w900,
+                            color: AppColors.headingDark,
+                            letterSpacing: 0.8,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () => Navigator.pop(context),
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: AppColors.surface,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white12),
+                            ),
+                            child: const Icon(
+                              Icons.close_rounded,
+                              size: 16,
+                              color: AppColors.subtext,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'GRID SIZE',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.subtext,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF10B981).withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            '${selectedGrid}x$selectedGrid',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w900,
+                              color: Color(0xFF10B981),
+                              letterSpacing: 0.8,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        activeTrackColor: const Color(0xFF10B981),
+                        inactiveTrackColor: AppColors.surface,
+                        thumbColor: const Color(0xFF10B981),
+                        overlayColor: const Color(0xFF10B981).withValues(alpha: 0.2),
+                        trackHeight: 6,
+                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 9),
                       ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 12),
-                TangibleButton(
-                  text: 'MEDIUM',
-                  isSecondary: true,
-                  height: 50,
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HueSortScreen(levelNumber: 15, isRandom: true),
+                      child: Slider(
+                        value: selectedGrid.toDouble(),
+                        min: 3,
+                        max: 10,
+                        divisions: 7,
+                        onChanged: (val) {
+                          setModalState(() {
+                            selectedGrid = val.round();
+                          });
+                        },
                       ),
-                    );
-                  },
-                ),
-                const SizedBox(height: 12),
-                TangibleButton(
-                  text: 'HARD',
-                  isSecondary: true,
-                  height: 50,
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HueSortScreen(levelNumber: 35, isRandom: true),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'DIFFICULTY',
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.subtext,
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF10B981).withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            selectedDiff.name.toUpperCase(),
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w900,
+                              color: Color(0xFF10B981),
+                              letterSpacing: 0.8,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        activeTrackColor: const Color(0xFF10B981),
+                        inactiveTrackColor: AppColors.surface,
+                        thumbColor: const Color(0xFF10B981),
+                        overlayColor: const Color(0xFF10B981).withValues(alpha: 0.2),
+                        trackHeight: 6,
+                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 9),
                       ),
-                    );
-                  },
+                      child: Slider(
+                        value: selectedDiff.index.toDouble(),
+                        min: 0,
+                        max: (HueSortDifficulty.values.length - 1).toDouble(),
+                        divisions: HueSortDifficulty.values.length - 1,
+                        onChanged: (val) {
+                          setModalState(() {
+                            selectedDiff = HueSortDifficulty.values[val.round()];
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TangibleButton(
+                      text: 'Start Puzzle',
+                      height: 48,
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HueSortScreen(
+                              levelNumber: 1,
+                              gridSize: selectedGrid,
+                              difficulty: selectedDiff,
+                              isRandom: true,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
@@ -184,12 +293,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                   _circleButton(
                     icon: Icons.favorite_rounded,
                     iconColor: const Color(0xFFEF4444),
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SupportView(),
-                      ),
-                    ),
+                    onTap: () => _launchUrl('https://ko-fi.com/sidhant947'),
                   ),
                 ],
               ),
@@ -257,10 +361,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
               // Play Button (Primary CTA)
               TangibleButton(
-                text:
-                    state.progress == null || state.progress!.currentLevel <= 1
-                    ? 'Start Game'
-                    : 'Continue',
+                text: 'Play',
                 onPressed: state.isLoading
                     ? null
                     : () async {

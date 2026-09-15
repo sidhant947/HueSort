@@ -107,7 +107,7 @@ class HueSortViewModel extends StateNotifier<HueSortState> {
   }
 
   void useHint() {
-    if (state.isSolved || state.hintsRemaining <= 0) return;
+    if (state.isSolved) return;
 
     int targetSlot = -1;
     for (int i = 0; i < state.currentColors.length; i++) {
@@ -148,7 +148,6 @@ class HueSortViewModel extends StateNotifier<HueSortState> {
     state = state.copyWith(
       currentColors: newColors,
       isSolved: solved,
-      hintsRemaining: state.hintsRemaining - 1,
       clearSelection: true,
     );
   }

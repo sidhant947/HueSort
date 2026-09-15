@@ -48,6 +48,7 @@ class _HueSortScreenState extends ConsumerState<HueSortScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(themeSkinProvider);
     final state = ref.watch(hueSortViewModelProvider);
     final notifier = ref.read(hueSortViewModelProvider.notifier);
 
@@ -57,7 +58,6 @@ class _HueSortScreenState extends ConsumerState<HueSortScreen> {
         if (!widget.isRandom) {
           ref.read(homeViewModelProvider.notifier).completeLevel(widget.levelNumber);
         }
-        _showCompletionDialog();
       }
     });
 
@@ -81,27 +81,25 @@ class _HueSortScreenState extends ConsumerState<HueSortScreen> {
                     children: [
                       Text(
                         widget.isRandom
-                            ? 'RANDOM PUZZLE'
+                            ? 'Random Puzzle'
                             : (HueSortEngine.isBossLevel(widget.levelNumber)
-                                ? '👑 BOSS LEVEL ${widget.levelNumber}'
-                                : 'LEVEL ${widget.levelNumber}'),
+                                ? '👑 Boss Level ${widget.levelNumber}'
+                                : 'Level ${widget.levelNumber}'),
                         style: TextStyle(
-                          fontSize: HueSortEngine.isBossLevel(widget.levelNumber) && !widget.isRandom ? 22 : 26,
-                          fontWeight: FontWeight.w900,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
                           color: HueSortEngine.isBossLevel(widget.levelNumber) && !widget.isRandom
                               ? const Color(0xFFFFB800)
                               : AppColors.headingDark,
-                          letterSpacing: 1.0,
                         ),
                       ),
                       if (HueSortEngine.isBossLevel(widget.levelNumber) && !widget.isRandom)
                         const Text(
-                          'MASTER THE GRADIENT',
+                          'Master the Gradient',
                           style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
                             color: Color(0xFFFFB800),
-                            letterSpacing: 1.2,
                           ),
                         ),
                     ],
@@ -138,12 +136,11 @@ class _HueSortScreenState extends ConsumerState<HueSortScreen> {
                     Icon(Icons.grid_on_rounded, size: 18, color: AppColors.headingDark),
                     const SizedBox(width: 8),
                     Text(
-                      '${state.wrongTilesCount} TILES TO FIX',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
+                      '${state.wrongTilesCount} tiles to fix',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
                         color: AppColors.headingDark,
-                        letterSpacing: 0.5,
                       ),
                     ),
                   ],
@@ -156,7 +153,9 @@ class _HueSortScreenState extends ConsumerState<HueSortScreen> {
               child: Center(
                 child: LayoutBuilder(
                   builder: (context, constraints) {
-                    final gridSize = constraints.maxWidth - 32;
+                    final availW = constraints.maxWidth - 32;
+                    final availH = constraints.maxHeight - 16;
+                    final gridSize = availW < availH ? (availW > 0 ? availW : 0.0) : (availH > 0 ? availH : 0.0);
                     return SizedBox(
                       width: gridSize,
                       height: gridSize,
@@ -284,7 +283,77 @@ class _HueSortScreenState extends ConsumerState<HueSortScreen> {
               ),
             ),
 
-            if (ref.watch(hintHelperProvider))
+            if (state.isSolved)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      widget.isRandom ? 'Puzzle Complete!' : 'Level Complete!',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.headingDark,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      'You sorted the colors perfectly!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.subtext,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      width: 220,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TangibleButton(
+                            text: widget.isRandom ? 'New Puzzle' : 'Next Level',
+                            height: 44,
+                            onPressed: () {
+                              if (widget.isRandom) {
+                                ref.read(hueSortViewModelProvider.notifier).newGame();
+                              } else {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HueSortScreen(
+                                      levelNumber: widget.levelNumber + 1,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 8),
+                          TangibleButton(
+                            text: 'Home',
+                            height: 44,
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          const SizedBox(height: 8),
+                          TangibleButton(
+                            text: 'Buy Me a Coffee',
+                            isSecondary: true,
+                            height: 44,
+                            onPressed: () async {
+                              final Uri url = Uri.parse('https://ko-fi.com/sidhant947');
+                              await launchUrl(url, mode: LaunchMode.externalApplication);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            else if (ref.watch(hintHelperProvider))
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
                 child: SizedBox(
@@ -293,7 +362,7 @@ class _HueSortScreenState extends ConsumerState<HueSortScreen> {
                     text: 'Hint',
                     isSecondary: true,
                     height: 52,
-                    onPressed: (state.hintsRemaining > 0 && !state.isSolved)
+                    onPressed: !state.isSolved
                         ? () {
                             HapticFeedback.mediumImpact();
                             notifier.useHint();
@@ -308,102 +377,6 @@ class _HueSortScreenState extends ConsumerState<HueSortScreen> {
         ),
       ),
     );
-  }
-
-  void _showCompletionDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => Dialog(
-          backgroundColor: Colors.transparent,
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.bg,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white24, width: 1.0),
-            ),
-            padding: const EdgeInsets.all(28),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    widget.isRandom ? 'PUZZLE COMPLETE!' : 'LEVEL COMPLETE!',
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w900,
-                      color: AppColors.headingDark,
-                      letterSpacing: 1.0,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    'You sorted the colors perfectly!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.subtext,
-                      height: 1.2,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 28),
-                SizedBox(
-                  width: 220,
-                  child: Column(
-                    children: [
-                      if (!widget.isRandom)
-                        TangibleButton(
-                          text: 'Next Level',
-                          height: 50,
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HueSortScreen(
-                                  levelNumber: widget.levelNumber + 1,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      if (!widget.isRandom) const SizedBox(height: 14),
-                      TangibleButton(
-                        text: widget.isRandom ? 'New Puzzle' : 'Home',
-                        height: 50,
-                        onPressed: () {
-                          Navigator.pop(context);
-                          if (widget.isRandom) {
-                            ref.read(hueSortViewModelProvider.notifier).newGame();
-                          } else {
-                            Navigator.pop(context);
-                          }
-                        },
-                      ),
-                      const SizedBox(height: 14),
-                      TangibleButton(
-                        text: 'Buy Me a Coffee',
-                        isSecondary: true,
-                        height: 50,
-                        onPressed: () async {
-                          final Uri url = Uri.parse('https://ko-fi.com/sidhant947');
-                          await launchUrl(url, mode: LaunchMode.externalApplication);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
   }
 
   Widget _circleButton({

@@ -7,6 +7,8 @@ import '../ui/core/theme/app_theme.dart';
 import '../ui/providers.dart';
 import '../ui/features/home/views/home_view.dart';
 
+import '../ui/core/theme/app_colors.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -27,14 +29,17 @@ void main() async {
   );
 }
 
-class HueSortApp extends StatelessWidget {
+class HueSortApp extends ConsumerWidget {
   const HueSortApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final skin = ref.watch(themeSkinProvider);
+    AppColors.setSkin(skin);
+
     return MaterialApp(
       title: 'Hue Sort',
-      theme: AppTheme.light,
+      theme: AppTheme.getTheme(skin),
       home: const HomeView(),
       debugShowCheckedModeBanner: false,
     );

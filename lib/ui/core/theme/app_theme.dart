@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:huesort/ui/core/theme/app_colors.dart';
 
 class _NoTransitionBuilder extends PageTransitionsBuilder {
   const _NoTransitionBuilder();
@@ -29,39 +30,37 @@ class AppTheme {
     },
   );
 
-  static ThemeData get light => ThemeData(
-    fontFamily: 'BebasNeue',
+  static ThemeData getTheme(AppThemeSkin skin) => ThemeData(
     pageTransitionsTheme: _noTransitionTheme,
     brightness: Brightness.light,
-    scaffoldBackgroundColor: const Color(0xFFFAF6EE),
-    appBarTheme: const AppBarTheme(
+    scaffoldBackgroundColor: skin.bg,
+    appBarTheme: AppBarTheme(
       backgroundColor: Colors.transparent,
       elevation: 0,
       centerTitle: true,
       titleTextStyle: TextStyle(
-        fontSize: 26,
-        fontWeight: FontWeight.w900,
-        color: Color(0xFF2B2D42),
-        letterSpacing: 1.0,
+        fontSize: 18,
+        fontWeight: FontWeight.w500,
+        color: skin.headingDark,
       ),
-      iconTheme: IconThemeData(color: Color(0xFF2B2D42)),
+      iconTheme: IconThemeData(color: skin.headingDark),
     ),
     dividerTheme: const DividerThemeData(
       color: Color(0xFFE2E2E6),
       thickness: 1,
     ),
-    textTheme: const TextTheme(
-      displayLarge: TextStyle(color: Color(0xFF2B2D42), letterSpacing: -0.5),
-      displayMedium: TextStyle(color: Color(0xFF2B2D42), letterSpacing: -0.5),
-      displaySmall: TextStyle(color: Color(0xFF2B2D42), letterSpacing: -0.5),
-      headlineLarge: TextStyle(color: Color(0xFF2B2D42), letterSpacing: -0.5),
-      headlineMedium: TextStyle(color: Color(0xFF2B2D42), letterSpacing: -0.5),
-      headlineSmall: TextStyle(color: Color(0xFF2B2D42), letterSpacing: -0.5),
-      titleLarge: TextStyle(color: Color(0xFF2B2D42), letterSpacing: 0.5),
-      titleMedium: TextStyle(color: Color(0xFF2B2D42), letterSpacing: 0.5),
-      bodyLarge: TextStyle(color: Color(0xFF2B2D42), fontWeight: FontWeight.w500),
-      bodyMedium: TextStyle(color: Color(0xFF6C757D), fontWeight: FontWeight.normal),
-      labelLarge: TextStyle(color: Color(0xFF2B2D42), fontWeight: FontWeight.bold),
+    textTheme: TextTheme(
+      displayLarge: TextStyle(color: skin.headingDark),
+      displayMedium: TextStyle(color: skin.headingDark),
+      displaySmall: TextStyle(color: skin.headingDark),
+      headlineLarge: TextStyle(color: skin.headingDark),
+      headlineMedium: TextStyle(color: skin.headingDark),
+      headlineSmall: TextStyle(color: skin.headingDark),
+      titleLarge: TextStyle(color: skin.headingDark),
+      titleMedium: TextStyle(color: skin.headingDark),
+      bodyLarge: TextStyle(color: skin.headingDark, fontWeight: FontWeight.normal),
+      bodyMedium: TextStyle(color: skin.subtext, fontWeight: FontWeight.normal),
+      labelLarge: TextStyle(color: skin.headingDark, fontWeight: FontWeight.w500),
     ),
   );
 }

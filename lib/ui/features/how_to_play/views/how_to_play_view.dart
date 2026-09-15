@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:huesort/ui/core/theme/app_colors.dart';
 import 'package:huesort/ui/core/widgets/tangible_button.dart';
+import 'package:huesort/ui/providers.dart';
 
-class HowToPlayView extends StatelessWidget {
+class HowToPlayView extends ConsumerWidget {
   const HowToPlayView({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(themeSkinProvider);
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
@@ -30,23 +33,21 @@ class HowToPlayView extends StatelessWidget {
                           width: 1.0,
                         ),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_back_ios_new_rounded,
                         size: 18,
                         color: AppColors.headingDark,
                       ),
                     ),
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Center(
                       child: Text(
-                        'HOW TO PLAY',
+                        'How to Play',
                         style: TextStyle(
-
-                          fontSize: 26,
-                          fontWeight: FontWeight.w900,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
                           color: AppColors.headingDark,
-                          letterSpacing: 1.0,
                         ),
                       ),
                     ),
@@ -103,7 +104,6 @@ class HowToPlayView extends StatelessWidget {
               ),
             ),
 
-            // Got It button at the bottom
             Padding(
               padding: const EdgeInsets.all(24),
               child: TangibleButton(
@@ -150,30 +150,26 @@ class HowToPlayView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'RULE $num',
-                  style: const TextStyle(
-
+                  'Rule $num',
+                  style: TextStyle(
                     fontSize: 12,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                     color: AppColors.subtext,
-                    letterSpacing: 0.8,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  title.toUpperCase(),
-                  style: const TextStyle(
-
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
+                  title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
                     color: AppColors.headingDark,
-                    letterSpacing: 0.5,
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   desc,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     color: AppColors.subtext,
                     height: 1.3,

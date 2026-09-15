@@ -10,6 +10,7 @@ class HiveService {
   static const String _settingsBoxName = 'huesort_settings';
   static const String _showTilesToFixKey = 'show_tiles_to_fix';
   static const String _hintHelperKey = 'hint_helper';
+  static const String _themeSkinKey = 'theme_skin';
 
   late Box<UserProgress> _progressBox;
   late Box<dynamic> _settingsBox;
@@ -47,5 +48,13 @@ class HiveService {
 
   Future<void> setHintHelper(bool enabled) async {
     await _settingsBox.put(_hintHelperKey, enabled);
+  }
+
+  String getThemeSkin() {
+    return _settingsBox.get(_themeSkinKey, defaultValue: 'charcoal') as String;
+  }
+
+  Future<void> setThemeSkin(String skinId) async {
+    await _settingsBox.put(_themeSkinKey, skinId);
   }
 }

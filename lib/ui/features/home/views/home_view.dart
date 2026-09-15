@@ -84,13 +84,12 @@ class _HomeViewState extends ConsumerState<HomeView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          'RANDOM PUZZLE',
+                        Text(
+                          'Random Puzzle',
                           style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w900,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
                             color: AppColors.headingDark,
-                            letterSpacing: 0.8,
                           ),
                         ),
                         GestureDetector(
@@ -102,7 +101,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                               shape: BoxShape.circle,
                               border: Border.all(color: Colors.white12),
                             ),
-                            child: const Icon(
+                            child: Icon(
                               Icons.close_rounded,
                               size: 16,
                               color: AppColors.subtext,
@@ -115,28 +114,31 @@ class _HomeViewState extends ConsumerState<HomeView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          'GRID SIZE',
+                        Text(
+                          'Grid Size',
                           style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w800,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
                             color: AppColors.subtext,
-                            letterSpacing: 1.0,
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF10B981).withValues(alpha: 0.2),
+                            color: const Color(
+                              0xFF10B981,
+                            ).withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
                             '${selectedGrid}x$selectedGrid',
                             style: const TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w900,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
                               color: Color(0xFF10B981),
-                              letterSpacing: 0.8,
                             ),
                           ),
                         ),
@@ -148,9 +150,13 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         activeTrackColor: const Color(0xFF10B981),
                         inactiveTrackColor: AppColors.surface,
                         thumbColor: const Color(0xFF10B981),
-                        overlayColor: const Color(0xFF10B981).withValues(alpha: 0.2),
+                        overlayColor: const Color(
+                          0xFF10B981,
+                        ).withValues(alpha: 0.2),
                         trackHeight: 6,
-                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 9),
+                        thumbShape: const RoundSliderThumbShape(
+                          enabledThumbRadius: 9,
+                        ),
                       ),
                       child: Slider(
                         value: selectedGrid.toDouble(),
@@ -168,28 +174,31 @@ class _HomeViewState extends ConsumerState<HomeView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          'DIFFICULTY',
+                        Text(
+                          'Difficulty',
                           style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w800,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
                             color: AppColors.subtext,
-                            letterSpacing: 1.0,
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF10B981).withValues(alpha: 0.2),
+                            color: const Color(
+                              0xFF10B981,
+                            ).withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            selectedDiff.name.toUpperCase(),
+                            '${selectedDiff.name[0].toUpperCase()}${selectedDiff.name.substring(1)}',
                             style: const TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w900,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
                               color: Color(0xFF10B981),
-                              letterSpacing: 0.8,
                             ),
                           ),
                         ),
@@ -201,9 +210,13 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         activeTrackColor: const Color(0xFF10B981),
                         inactiveTrackColor: AppColors.surface,
                         thumbColor: const Color(0xFF10B981),
-                        overlayColor: const Color(0xFF10B981).withValues(alpha: 0.2),
+                        overlayColor: const Color(
+                          0xFF10B981,
+                        ).withValues(alpha: 0.2),
                         trackHeight: 6,
-                        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 9),
+                        thumbShape: const RoundSliderThumbShape(
+                          enabledThumbRadius: 9,
+                        ),
                       ),
                       child: Slider(
                         value: selectedDiff.index.toDouble(),
@@ -212,7 +225,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         divisions: HueSortDifficulty.values.length - 1,
                         onChanged: (val) {
                           setModalState(() {
-                            selectedDiff = HueSortDifficulty.values[val.round()];
+                            selectedDiff =
+                                HueSortDifficulty.values[val.round()];
                           });
                         },
                       ),
@@ -248,6 +262,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(themeSkinProvider);
     final state = ref.watch(homeViewModelProvider);
 
     return Scaffold(
@@ -264,7 +279,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
                   _circleButton(
                     icon: Icons.star_rounded,
                     iconColor: const Color(0xFFFFCC00),
-                    onTap: () => _launchUrl('https://github.com/sidhant947/HueSort'),
+                    onTap: () =>
+                        _launchUrl('https://github.com/sidhant947/HueSort'),
                   ),
                   if (state.progress != null)
                     Container(
@@ -278,13 +294,11 @@ class _HomeViewState extends ConsumerState<HomeView> {
                         border: Border.all(color: Colors.white24, width: 1.0),
                       ),
                       child: Text(
-                        'LEVEL ${state.progress!.currentLevel}',
-                        style: const TextStyle(
-      
+                        'Level ${state.progress!.currentLevel}',
+                        style: TextStyle(
                           fontSize: 14,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w500,
                           color: AppColors.headingDark,
-                          letterSpacing: 0.8,
                         ),
                       ),
                     )
@@ -332,28 +346,24 @@ class _HomeViewState extends ConsumerState<HomeView> {
               const SizedBox(height: 28),
 
               // Game Title
-              const FittedBox(
+              FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
                   'Hue Sort',
                   style: TextStyle(
-
-                    fontSize: 62,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white, // White
-                    letterSpacing: 1.0,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.headingDark,
                   ),
                 ),
               ),
               const SizedBox(height: 2),
-              const Text(
-                'SORT THE COLORS TO MATCH THE GRADIENT',
+              Text(
+                'Sort the colors to match the gradient',
                 style: TextStyle(
-
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                  fontWeight: FontWeight.normal,
                   color: AppColors.subtext,
-                  letterSpacing: 1.2,
                 ),
               ),
 
@@ -381,7 +391,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
               // Level Select Button
               TangibleButton(
-                text: 'Select Level',
+                text: 'Levels',
                 isSecondary: true,
                 onPressed: () async {
                   await Navigator.push(
@@ -398,7 +408,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
               // Random Puzzle Button
               TangibleButton(
-                text: 'Random Puzzle',
+                text: 'Random',
                 isSecondary: true,
                 onPressed: () => _showDifficultyDialog(context),
               ),

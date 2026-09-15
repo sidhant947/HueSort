@@ -61,12 +61,11 @@ class _TangibleButtonState extends State<TangibleButton> {
           ),
           alignment: Alignment.center,
           child: Text(
-            widget.text.toUpperCase(),
+            widget.text,
             style: TextStyle(
               color: textColor,
-              fontSize: 20,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 1.5,
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),

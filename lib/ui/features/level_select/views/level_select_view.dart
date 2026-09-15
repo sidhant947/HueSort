@@ -23,6 +23,7 @@ class _LevelSelectViewState extends ConsumerState<LevelSelectView> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(themeSkinProvider);
     final state = ref.watch(homeViewModelProvider);
     final highestCompleted = state.progress?.highestLevelCompleted ?? 0;
     final currentLevel = state.progress?.currentLevel ?? 1;
@@ -52,37 +53,33 @@ class _LevelSelectViewState extends ConsumerState<LevelSelectView> {
                           width: 1.0,
                         ),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_back_ios_new_rounded,
                         size: 18,
                         color: AppColors.headingDark,
                       ),
                     ),
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Center(
                       child: Text(
-                        'LEVELS',
+                        'Levels',
                         style: TextStyle(
-
-                          fontSize: 28,
-                          fontWeight: FontWeight.w900,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
                           color: AppColors.headingDark,
-                          letterSpacing: 1.0,
                         ),
                       ),
                     ),
                   ),
-                  // Balanced invisible spacer to perfectly center the text
                   const SizedBox(width: 44),
                 ],
               ),
             ),
 
-            // Grid of levels
             Expanded(
               child: GridView.builder(
-                padding: const EdgeInsets.fromLTRB(24, 24, 28, 28), // extra right/bottom padding for 3D shadow
+                padding: const EdgeInsets.fromLTRB(24, 24, 28, 28),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4,
                   crossAxisSpacing: 16,
@@ -126,7 +123,7 @@ class _LevelSelectViewState extends ConsumerState<LevelSelectView> {
     final isBoss = HueSortEngine.isBossLevel(levelNumber);
 
     if (isCompleted) {
-      cardBg = isBoss ? const Color(0xFFD97706) : const Color(0xFF10B981); // Amber / Emerald
+      cardBg = isBoss ? const Color(0xFFD97706) : const Color(0xFF10B981);
       content = Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -139,16 +136,16 @@ class _LevelSelectViewState extends ConsumerState<LevelSelectView> {
               ],
               Text(
                 '$levelNumber',
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w900,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
                   color: AppColors.headingWhite,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 2),
-          const Icon(
+          Icon(
             Icons.check_circle_rounded,
             size: 14,
             color: AppColors.headingWhite,
@@ -164,9 +161,9 @@ class _LevelSelectViewState extends ConsumerState<LevelSelectView> {
           Text(
             '$levelNumber',
             style: TextStyle(
-              fontSize: isBoss ? 20 : 26,
+              fontSize: 16,
               color: isBoss ? Colors.black87 : AppColors.headingWhite,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],

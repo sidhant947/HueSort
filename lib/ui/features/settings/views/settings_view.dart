@@ -10,13 +10,11 @@ class SettingsView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
         child: Column(
           children: [
-            // Header bar
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
@@ -33,23 +31,21 @@ class SettingsView extends ConsumerWidget {
                           width: 1.0,
                         ),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.arrow_back_ios_new_rounded,
                         size: 18,
                         color: AppColors.headingDark,
                       ),
                     ),
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Center(
                       child: Text(
-                        'SETTINGS',
+                        'Settings',
                         style: TextStyle(
-
-                          fontSize: 28,
-                          fontWeight: FontWeight.w900,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
                           color: AppColors.headingDark,
-                          letterSpacing: 1.0,
                         ),
                       ),
                     ),
@@ -58,7 +54,6 @@ class SettingsView extends ConsumerWidget {
                 ],
               ),
             ),
-
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.fromLTRB(24, 16, 28, 28),
@@ -74,19 +69,19 @@ class SettingsView extends ConsumerWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'Show Tiles to Fix',
                                 style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w800,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
                                   color: AppColors.headingDark,
                                 ),
                               ),
-                              SizedBox(height: 4),
+                              const SizedBox(height: 4),
                               Text(
                                 'Display counter of incorrect tiles during gameplay',
                                 style: TextStyle(
@@ -118,19 +113,19 @@ class SettingsView extends ConsumerWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'Hint Helper',
                                 style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w800,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
                                   color: AppColors.headingDark,
                                 ),
                               ),
-                              SizedBox(height: 4),
+                              const SizedBox(height: 4),
                               Text(
                                 'Display bottom hint button on gameplay screen',
                                 style: TextStyle(
@@ -151,6 +146,72 @@ class SettingsView extends ConsumerWidget {
                       ],
                     ),
                   ),
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.white24, width: 1.0),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Color Theme',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.headingDark,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Select your favorite pastel color theme skin',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: AppColors.subtext,
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        SizedBox(
+                          height: 44,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: AppThemeSkin.allSkins.length,
+                            separatorBuilder: (context, index) => const SizedBox(width: 12),
+                            itemBuilder: (context, index) {
+                              final skin = AppThemeSkin.allSkins[index];
+                              final isSelected = ref.watch(themeSkinProvider).id == skin.id;
+
+                              return GestureDetector(
+                                onTap: () => ref.read(themeSkinProvider.notifier).setSkin(skin),
+                                child: Container(
+                                  width: 42,
+                                  height: 42,
+                                  decoration: BoxDecoration(
+                                    color: skin.bg,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: isSelected ? const Color(0xFF10B981) : Colors.white30,
+                                      width: isSelected ? 3.0 : 1.5,
+                                    ),
+                                  ),
+                                  child: isSelected
+                                      ? Icon(
+                                          Icons.check_rounded,
+                                          size: 20,
+                                          color: skin.headingDark,
+                                        )
+                                      : null,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   TangibleButton(
                     text: 'Reset Progress',
                     isSecondary: true,
@@ -164,8 +225,6 @@ class SettingsView extends ConsumerWidget {
       ),
     );
   }
-
-
 
   void _confirmReset(BuildContext context, WidgetRef ref) {
     showDialog(
@@ -182,23 +241,20 @@ class SettingsView extends ConsumerWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'RESET PROGRESS?',
+              Text(
+                'Reset progress?',
                 style: TextStyle(
-
-                  fontSize: 24,
-                  fontWeight: FontWeight.w900,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
                   color: AppColors.headingDark,
-                  letterSpacing: 1.0,
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
+              Text(
                 'This clears all level progress and best scores. This cannot be undone.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
                   color: AppColors.subtext,
                 ),
               ),
@@ -213,13 +269,11 @@ class SettingsView extends ConsumerWidget {
               const SizedBox(height: 12),
               TextButton(
                 onPressed: () => Navigator.pop(dialogContext),
-                child: const Text(
-                  'CANCEL',
+                child: Text(
+                  'Cancel',
                   style: TextStyle(
-  
                     color: AppColors.subtext,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.2,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),

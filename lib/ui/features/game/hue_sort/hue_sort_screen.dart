@@ -37,12 +37,14 @@ class _HueSortScreenState extends ConsumerState<HueSortScreen> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      ref.read(hueSortViewModelProvider.notifier).initGame(
-        levelNumber: widget.levelNumber,
-        gridSize: widget.gridSize,
-        difficulty: widget.difficulty,
-        isRandom: widget.isRandom,
-      );
+      ref
+          .read(hueSortViewModelProvider.notifier)
+          .initGame(
+            levelNumber: widget.levelNumber,
+            gridSize: widget.gridSize,
+            difficulty: widget.difficulty,
+            isRandom: widget.isRandom,
+          );
     });
   }
 
@@ -56,7 +58,9 @@ class _HueSortScreenState extends ConsumerState<HueSortScreen> {
       if (next.isSolved && !(previous?.isSolved ?? false)) {
         HapticFeedback.heavyImpact();
         if (!widget.isRandom) {
-          ref.read(homeViewModelProvider.notifier).completeLevel(widget.levelNumber);
+          ref
+              .read(homeViewModelProvider.notifier)
+              .completeLevel(widget.levelNumber);
         }
       }
     });
@@ -83,17 +87,20 @@ class _HueSortScreenState extends ConsumerState<HueSortScreen> {
                         widget.isRandom
                             ? 'Random Puzzle'
                             : (HueSortEngine.isBossLevel(widget.levelNumber)
-                                ? '👑 Boss Level ${widget.levelNumber}'
-                                : 'Level ${widget.levelNumber}'),
+                                  ? '👑 Boss Level ${widget.levelNumber}'
+                                  : 'Level ${widget.levelNumber}'),
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
-                          color: HueSortEngine.isBossLevel(widget.levelNumber) && !widget.isRandom
+                          color:
+                              HueSortEngine.isBossLevel(widget.levelNumber) &&
+                                  !widget.isRandom
                               ? const Color(0xFFFFB800)
                               : AppColors.headingDark,
                         ),
                       ),
-                      if (HueSortEngine.isBossLevel(widget.levelNumber) && !widget.isRandom)
+                      if (HueSortEngine.isBossLevel(widget.levelNumber) &&
+                          !widget.isRandom)
                         const Text(
                           'Master the Gradient',
                           style: TextStyle(
@@ -122,18 +129,16 @@ class _HueSortScreenState extends ConsumerState<HueSortScreen> {
             ),
 
             if (ref.watch(showTilesToFixProvider))
-              Container(
-                margin: const EdgeInsets.fromLTRB(20, 8, 20, 16),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.white24, width: 1.0),
-                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.grid_on_rounded, size: 18, color: AppColors.headingDark),
+                    Icon(
+                      Icons.grid_on_rounded,
+                      size: 18,
+                      color: AppColors.headingDark,
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       '${state.wrongTilesCount} tiles to fix',
@@ -155,127 +160,143 @@ class _HueSortScreenState extends ConsumerState<HueSortScreen> {
                   builder: (context, constraints) {
                     final availW = constraints.maxWidth - 32;
                     final availH = constraints.maxHeight - 16;
-                    final gridSize = availW < availH ? (availW > 0 ? availW : 0.0) : (availH > 0 ? availH : 0.0);
+                    final gridSize = availW < availH
+                        ? (availW > 0 ? availW : 0.0)
+                        : (availH > 0 ? availH : 0.0);
                     return SizedBox(
                       width: gridSize,
                       height: gridSize,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.white24, width: 1.0),
+                      child: GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: state.level.size,
+                          crossAxisSpacing: 4.0,
+                          mainAxisSpacing: 4.0,
                         ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: GridView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: state.level.size,
-                              crossAxisSpacing: 4.0,
-                              mainAxisSpacing: 4.0,
-                            ),
-                            itemCount: state.level.size * state.level.size,
-                            itemBuilder: (context, index) {
-                              final isFixed = state.level.fixedIndices.contains(index);
-                              final isSelected = state.selectedIndex == index;
+                        itemCount: state.level.size * state.level.size,
+                        itemBuilder: (context, index) {
+                          final isFixed = state.level.fixedIndices.contains(
+                            index,
+                          );
+                          final isSelected = state.selectedIndex == index;
 
-                              Widget tile = AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                decoration: BoxDecoration(
-                                  color: state.currentColors[index],
-                                  borderRadius: BorderRadius.circular(
-                                    isSelected ? 12 : 4,
-                                  ),
-                                  border: isSelected
-                                      ? Border.all(color: Colors.white, width: 4)
-                                      : null,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withValues(alpha: 0.1),
-                                      blurRadius: 2,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
+                          Widget tile = AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            decoration: BoxDecoration(
+                              color: state.currentColors[index],
+                              borderRadius: BorderRadius.circular(
+                                isSelected ? 12 : 4,
+                              ),
+                              border: isSelected
+                                  ? Border.all(color: Colors.white, width: 4)
+                                  : null,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.1),
+                                  blurRadius: 2,
+                                  offset: const Offset(0, 2),
                                 ),
-                                child: isFixed
-                                    ? Center(
-                                        child: Container(
-                                          width: 8,
-                                          height: 8,
-                                          decoration: BoxDecoration(
-                                            color: Colors.black.withValues(alpha: 0.3),
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                              color: Colors.white.withValues(alpha: 0.6),
-                                              width: 1.5,
-                                            ),
-                                          ),
+                              ],
+                            ),
+                            child: isFixed
+                                ? Center(
+                                    child: Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: BoxDecoration(
+                                        color: Colors.black.withValues(
+                                          alpha: 0.3,
                                         ),
-                                      )
-                                    : null,
-                              );
-
-                              Widget clickableTile = GestureDetector(
-                                onTap: () {
-                                  HapticFeedback.lightImpact();
-                                  notifier.selectTile(index);
-                                },
-                                child: tile,
-                              );
-
-                              if (isFixed || state.isSolved) {
-                                return clickableTile;
-                              }
-
-                              return DragTarget<int>(
-                                onWillAcceptWithDetails: (details) => details.data != index && !isFixed,
-                                onAcceptWithDetails: (details) {
-                                  HapticFeedback.mediumImpact();
-                                  notifier.swapTiles(details.data, index);
-                                },
-                                builder: (context, candidateData, rejectedData) {
-                                  final isHovered = candidateData.isNotEmpty;
-                                  return Draggable<int>(
-                                    data: index,
-                                    feedback: Material(
-                                      color: Colors.transparent,
-                                      child: SizedBox(
-                                        width: (gridSize - ((state.level.size - 1) * 4.0)) / state.level.size,
-                                        height: (gridSize - ((state.level.size - 1) * 4.0)) / state.level.size,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: state.currentColors[index],
-                                            borderRadius: BorderRadius.circular(12),
-                                            border: Border.all(color: Colors.white, width: 3),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black.withValues(alpha: 0.3),
-                                                blurRadius: 8,
-                                                offset: const Offset(0, 4),
-                                              ),
-                                            ],
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: Colors.white.withValues(
+                                            alpha: 0.6,
                                           ),
+                                          width: 1.5,
                                         ),
                                       ),
                                     ),
-                                    childWhenDragging: Opacity(
-                                      opacity: 0.3,
-                                      child: tile,
-                                    ),
-                                    child: isHovered
-                                        ? Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(4),
-                                              border: Border.all(color: Colors.white, width: 2),
+                                  )
+                                : null,
+                          );
+
+                          Widget clickableTile = GestureDetector(
+                            onTap: () {
+                              HapticFeedback.lightImpact();
+                              notifier.selectTile(index);
+                            },
+                            child: tile,
+                          );
+
+                          if (isFixed || state.isSolved) {
+                            return clickableTile;
+                          }
+
+                          return DragTarget<int>(
+                            onWillAcceptWithDetails: (details) =>
+                                details.data != index && !isFixed,
+                            onAcceptWithDetails: (details) {
+                              HapticFeedback.mediumImpact();
+                              notifier.swapTiles(details.data, index);
+                            },
+                            builder: (context, candidateData, rejectedData) {
+                              final isHovered = candidateData.isNotEmpty;
+                              return Draggable<int>(
+                                data: index,
+                                feedback: Material(
+                                  color: Colors.transparent,
+                                  child: SizedBox(
+                                    width:
+                                        (gridSize -
+                                            ((state.level.size - 1) * 4.0)) /
+                                        state.level.size,
+                                    height:
+                                        (gridSize -
+                                            ((state.level.size - 1) * 4.0)) /
+                                        state.level.size,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: state.currentColors[index],
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: Colors.white,
+                                          width: 3,
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withValues(
+                                              alpha: 0.3,
                                             ),
-                                            child: clickableTile,
-                                          )
-                                        : clickableTile,
-                                  );
-                                },
+                                            blurRadius: 8,
+                                            offset: const Offset(0, 4),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                childWhenDragging: Opacity(
+                                  opacity: 0.3,
+                                  child: tile,
+                                ),
+                                child: isHovered
+                                    ? Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
+                                          border: Border.all(
+                                            color: Colors.white,
+                                            width: 2,
+                                          ),
+                                        ),
+                                        child: clickableTile,
+                                      )
+                                    : clickableTile,
                               );
                             },
-                          ),
-                        ),
+                          );
+                        },
                       ),
                     );
                   },
@@ -288,16 +309,8 @@ class _HueSortScreenState extends ConsumerState<HueSortScreen> {
                 padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      widget.isRandom ? 'Puzzle Complete!' : 'Level Complete!',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.headingDark,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
                     Text(
                       'You sorted the colors perfectly!',
                       textAlign: TextAlign.center,
@@ -307,48 +320,47 @@ class _HueSortScreenState extends ConsumerState<HueSortScreen> {
                         color: AppColors.subtext,
                       ),
                     ),
+                    const SizedBox(height: 12),
+                    TangibleButton(
+                      text: widget.isRandom ? 'New Puzzle' : 'Next Level',
+                      height: 44,
+                      onPressed: () {
+                        if (widget.isRandom) {
+                          ref
+                              .read(hueSortViewModelProvider.notifier)
+                              .newGame();
+                        } else {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HueSortScreen(
+                                levelNumber: widget.levelNumber + 1,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                    ),
                     const SizedBox(height: 8),
-                    SizedBox(
-                      width: 220,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          TangibleButton(
-                            text: widget.isRandom ? 'New Puzzle' : 'Next Level',
-                            height: 44,
-                            onPressed: () {
-                              if (widget.isRandom) {
-                                ref.read(hueSortViewModelProvider.notifier).newGame();
-                              } else {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => HueSortScreen(
-                                      levelNumber: widget.levelNumber + 1,
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                          ),
-                          const SizedBox(height: 8),
-                          TangibleButton(
-                            text: 'Home',
-                            height: 44,
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                          const SizedBox(height: 8),
-                          TangibleButton(
-                            text: 'Buy Me a Coffee',
-                            isSecondary: true,
-                            height: 44,
-                            onPressed: () async {
-                              final Uri url = Uri.parse('https://ko-fi.com/sidhant947');
-                              await launchUrl(url, mode: LaunchMode.externalApplication);
-                            },
-                          ),
-                        ],
-                      ),
+                    TangibleButton(
+                      text: 'Home',
+                      height: 44,
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    const SizedBox(height: 8),
+                    TangibleButton(
+                      text: 'Buy Me a Coffee',
+                      isSecondary: true,
+                      height: 44,
+                      onPressed: () async {
+                        final Uri url = Uri.parse(
+                          'https://ko-fi.com/sidhant947',
+                        );
+                        await launchUrl(
+                          url,
+                          mode: LaunchMode.externalApplication,
+                        );
+                      },
                     ),
                   ],
                 ),

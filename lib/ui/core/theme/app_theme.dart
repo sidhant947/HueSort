@@ -31,6 +31,7 @@ class AppTheme {
   );
 
   static ThemeData getTheme(AppThemeSkin skin) => ThemeData(
+    fontFamily: 'BebasNeue',
     pageTransitionsTheme: _noTransitionTheme,
     brightness: Brightness.light,
     scaffoldBackgroundColor: skin.bg,
@@ -39,6 +40,7 @@ class AppTheme {
       elevation: 0,
       centerTitle: true,
       titleTextStyle: TextStyle(
+        fontFamily: 'BebasNeue',
         fontSize: 18,
         fontWeight: FontWeight.w500,
         color: skin.headingDark,

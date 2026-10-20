@@ -146,6 +146,50 @@ class SettingsView extends ConsumerWidget {
                       ],
                     ),
                   ),
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.white24, width: 1.0),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Use System Font',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.headingDark,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Use default system font instead of custom font',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: AppColors.subtext,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Switch(
+                          value: ref.watch(useSystemFontProvider),
+                          activeTrackColor: const Color(0xFF10B981),
+                          onChanged: (val) {
+                            ref.read(useSystemFontProvider.notifier).toggle(val);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                   TangibleButton(
                     text: 'Reset Progress',
                     isSecondary: true,

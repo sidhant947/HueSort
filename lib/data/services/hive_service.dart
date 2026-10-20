@@ -11,6 +11,7 @@ class HiveService {
   static const String _showTilesToFixKey = 'show_tiles_to_fix';
   static const String _hintHelperKey = 'hint_helper';
   static const String _themeSkinKey = 'theme_skin';
+  static const String _useSystemFontKey = 'use_system_font';
 
   late Box<UserProgress> _progressBox;
   late Box<dynamic> _settingsBox;
@@ -56,5 +57,13 @@ class HiveService {
 
   Future<void> setThemeSkin(String skinId) async {
     await _settingsBox.put(_themeSkinKey, skinId);
+  }
+
+  bool getUseSystemFont() {
+    return _settingsBox.get(_useSystemFontKey, defaultValue: false) as bool;
+  }
+
+  Future<void> setUseSystemFont(bool useSystemFont) async {
+    await _settingsBox.put(_useSystemFontKey, useSystemFont);
   }
 }

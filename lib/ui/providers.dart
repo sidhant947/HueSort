@@ -77,3 +77,20 @@ class ThemeSkinNotifier extends StateNotifier<AppThemeSkin> {
   }
 }
 
+final useSystemFontProvider = StateNotifierProvider<UseSystemFontNotifier, bool>((ref) {
+  final hiveService = ref.watch(hiveServiceProvider);
+  return UseSystemFontNotifier(hiveService);
+});
+
+class UseSystemFontNotifier extends StateNotifier<bool> {
+  UseSystemFontNotifier(this._hiveService)
+      : super(_hiveService.getUseSystemFont());
+
+  final HiveService _hiveService;
+
+  Future<void> toggle(bool value) async {
+    state = value;
+    await _hiveService.setUseSystemFont(value);
+  }
+}
+

@@ -30,39 +30,42 @@ class AppTheme {
     },
   );
 
-  static ThemeData getTheme(AppThemeSkin skin) => ThemeData(
-    fontFamily: 'BebasNeue',
-    pageTransitionsTheme: _noTransitionTheme,
-    brightness: Brightness.light,
-    scaffoldBackgroundColor: skin.bg,
-    appBarTheme: AppBarTheme(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      centerTitle: true,
-      titleTextStyle: TextStyle(
-        fontFamily: 'BebasNeue',
-        fontSize: 18,
-        fontWeight: FontWeight.w500,
-        color: skin.headingDark,
+  static ThemeData getTheme(AppThemeSkin skin, {bool useSystemFont = false}) {
+    final fontFamily = useSystemFont ? null : 'BebasNeue';
+    return ThemeData(
+      fontFamily: fontFamily,
+      pageTransitionsTheme: _noTransitionTheme,
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: skin.bg,
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+        titleTextStyle: TextStyle(
+          fontFamily: fontFamily,
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+          color: skin.headingDark,
+        ),
+        iconTheme: IconThemeData(color: skin.headingDark),
       ),
-      iconTheme: IconThemeData(color: skin.headingDark),
-    ),
-    dividerTheme: const DividerThemeData(
-      color: Color(0xFFE2E2E6),
-      thickness: 1,
-    ),
-    textTheme: TextTheme(
-      displayLarge: TextStyle(color: skin.headingDark),
-      displayMedium: TextStyle(color: skin.headingDark),
-      displaySmall: TextStyle(color: skin.headingDark),
-      headlineLarge: TextStyle(color: skin.headingDark),
-      headlineMedium: TextStyle(color: skin.headingDark),
-      headlineSmall: TextStyle(color: skin.headingDark),
-      titleLarge: TextStyle(color: skin.headingDark),
-      titleMedium: TextStyle(color: skin.headingDark),
-      bodyLarge: TextStyle(color: skin.headingDark, fontWeight: FontWeight.normal),
-      bodyMedium: TextStyle(color: skin.subtext, fontWeight: FontWeight.normal),
-      labelLarge: TextStyle(color: skin.headingDark, fontWeight: FontWeight.w500),
-    ),
-  );
+      dividerTheme: const DividerThemeData(
+        color: Color(0xFFE2E2E6),
+        thickness: 1,
+      ),
+      textTheme: TextTheme(
+        displayLarge: TextStyle(color: skin.headingDark),
+        displayMedium: TextStyle(color: skin.headingDark),
+        displaySmall: TextStyle(color: skin.headingDark),
+        headlineLarge: TextStyle(color: skin.headingDark),
+        headlineMedium: TextStyle(color: skin.headingDark),
+        headlineSmall: TextStyle(color: skin.headingDark),
+        titleLarge: TextStyle(color: skin.headingDark),
+        titleMedium: TextStyle(color: skin.headingDark),
+        bodyLarge: TextStyle(color: skin.headingDark, fontWeight: FontWeight.normal),
+        bodyMedium: TextStyle(color: skin.subtext, fontWeight: FontWeight.normal),
+        labelLarge: TextStyle(color: skin.headingDark, fontWeight: FontWeight.w500),
+      ),
+    );
+  }
 }

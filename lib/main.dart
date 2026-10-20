@@ -35,11 +35,12 @@ class HueSortApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final skin = ref.watch(themeSkinProvider);
+    final useSystemFont = ref.watch(useSystemFontProvider);
     AppColors.setSkin(skin);
 
     return MaterialApp(
       title: 'Hue Sort',
-      theme: AppTheme.getTheme(skin),
+      theme: AppTheme.getTheme(skin, useSystemFont: useSystemFont),
       home: const HomeView(),
       debugShowCheckedModeBanner: false,
     );
